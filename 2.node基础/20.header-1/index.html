@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  hello
+  <button id="load">点击</button>
+</body>
+<script>
+  let xhr = new XMLHttpRequest()
+  // xhr.open('GET', '/user', true)
+  // xhr.open('POST', 'http://localhost:3000/user', true)
+  xhr.open('DELETE', 'http://localhost:3000/user', true)
+  xhr.responseType = 'json'
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  xhr.withCredentials = true
+  xhr.setRequestHeader('token', 'a')
+  xhr.onload = function(params) { //onload相当于服务器返回200， readState = 4 h5的新特性
+    console.log(typeof xhr.response)
+  }
+  xhr.send('a=1&b=1')
+
+  function hzi(data) {
+    console.log(data)
+  }
+
+  load.addEventListener('click',function () {
+    let script = document.createElement('script')
+    script.src = 'http://localhost:3000/jsonp?callback=hzi'
+    document.body.appendChild(script)
+  })
+</script>
+</html>
