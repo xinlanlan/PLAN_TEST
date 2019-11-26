@@ -112,7 +112,7 @@ http.createServer(async (req, res) => {
         }
       }
       if (pathname === '/jsonp') {
-        return res.end(`${query.callback}(a=1)`)
+        return res.end(`${query.callback}("a=1")`)
       }
       res.statusCode = 404
       res.end('Not Found')
