@@ -1,3 +1,7 @@
+// session的功能
+// cookie 是不安全的 如果服务端设置的cookie 浏览器可以看到具体内容 
+// session 来基于 cookie实现的安全些
+
 const http = require('http')
 const querystring = require('querystring')
 const crypto = require('crypto')
@@ -32,8 +36,6 @@ http.createServer((req, res) => {
     }else {
       return ''
     }
-    
-    
   }
 
   let arr = []
@@ -61,9 +63,6 @@ http.createServer((req, res) => {
       signed: true
     })
     if(cardId && session[cardId]) {
-      req.getCookie(cardName, {
-        signed: true
-      })
       session[cardId].visit ++
       res.setHeader('Content-Type', 'text/html;charset=utf-8')
       res.end(`这是第${session[cardId].visit}次访问`)
