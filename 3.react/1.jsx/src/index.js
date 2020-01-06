@@ -1,37 +1,30 @@
-import React from './react'
-import ReactDOM from './react-dom'
+/**
+ * 属性：父组件传递过来的，不能控制也不能改变
+ * 状态：组件内部产生维护，由自己维护，外界无法访问
+ */
 
-// 转义
-// let element = <h1 id="title"><span>hello</span><span>world</span></h1>
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom'
 
-// let element = React.createElement('h1', {id: "title"},
-//   React.createElement('span', {style: {color: 'red', backgroundColor: 'yellow'}}, 'hello'),
-//   React.createElement('span', {className: 'world'}, 'world')
-// ) 
+class Clock extends Component {
 
-// function Welcome(props) {
-//   return (
-//     <h1 id={props.id}>
-//       <span>hello</span>
-//       <span>world</span>
-//     </h1>
-//   )
-// }
-
-class Welcome extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      number: 1
+    }
+  }
+  add() {
+    this.setState({number: this.state.number + 1})
   }
   render() {
     return (
-      <h1 id={this.props.id}>
-        <span>hello</span>
-        <span>world</span>
-      </h1>
-    )
+      <div>
+        <div>{this.state.number}</div>
+        <button onClick={() => this.add()}>+</button>
+      </div>
+    );
   }
 }
 
-let element = React.createElement(Welcome, { id: 'title' })
-
-ReactDOM.render(element, document.getElementById('root'))
+ReactDOM.render(<Clock />, document.getElementById('root'))

@@ -11,11 +11,16 @@ function render(node, parent) {
     let element = new type(props).render()
     props = element.props
     type = element.type
+    if(typeof element.type === 'function') {
+      return render(element, parent)
+    }
   } else if(typeof type === 'function') {
     let element = type(props)
     type = element.type
     props = element.props
-    //return render(element, parent)
+    if(typeof element.type === 'function') {
+      return render(element, parent)
+    }
   }
 
   let domElement = document.createElement(type)
