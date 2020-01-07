@@ -38,8 +38,8 @@ function render(node, parent) {
     } else if(propName === 'style') {
       let styleObject = props.style
       let cssText = Object.keys(styleObject).map(attr => {
-        return `${attr.replace(/(A-Z)/g, () => {
-          return `-${arguments[1].toLowerCase()}`
+        return `${attr.replace(/[A-Z]/g, function() {
+          return `-${arguments[0].toLowerCase()}`
         })}:${styleObject[attr]}`
       }).join(';')
       domElement.style = cssText
