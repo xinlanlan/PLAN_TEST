@@ -15,7 +15,7 @@ class Clock extends Component {
     }
   }
   add() {
-    this.setState({ number: this.state.number + 1 })
+    this.setState({number: this.state.number + 1})
   }
   render() {
     return (
