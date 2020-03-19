@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div @click="fn($event)">点击</div>
+        <!-- 事件是绑定给元素的，并且是原生事件 -->
+        {{msg}}
+        <input type="text" :value="msg" @input="(e) => msg = e.target.value">
+        <input type="text" v-model="msg">
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    msg: 'hello world'
+                }
+            },
+            methods: {
+                // 如果调用方法时带上了()，需要手动传入事件源，名字是固定的$event
+                fn(e) {
+                    console.log(e)
+                    // 这里的this绑定的是window，内部使用bind方法进行了实现，再进行bind是无效的
+                    console.log(this)
+                    // 如果相同就表示绑定到这个div上了，如果不同就表示使用了代理
+                    console.log(e.target, e.currentTarget)
+                }
+            }
+        })
+    </script>
+</body>
+</html>

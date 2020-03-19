@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        // vue初始化的过程会让用户传入很多函数，在不用的时间点进行调用
+        // 生命周期中的this只想都是当前实例
+        // 生命周期都是同步执行
+
+        // 这里可以写一些公共逻辑，混入到组件中，合并到相应的生命周期中，再组件对应的生命周期之前运行
+        // 其实就是一个数组，依次执行['mixin created', 'created']
+        // 缺点就是不知道来源， vue3.0中compositionApi进行解决这个问题
+        Vue.mixin({
+            beforeCreate() {
+                console.log('初始化公共逻辑')
+            },
+            created() {
+                console.log('公共的created')
+            }
+        })
+        /**
+         * ajax一般放在哪里？
+         * 可以放在created中也可以放在mounted中，
+         * 写前端一般习惯放在mounted中，其实是一样的，因为ajax是异步的，生命周期是同步的
+         * 但是再服务端，我们一般放在created中，因为服务端没有mounted这个生命周期，没有dom
+         * 父子组件渲染的过程
+         * 父组件 beforeCreate created beforeMount render
+         * 子组件 beforeCreate created beforeMount render mounted
+         * 父组件 mounted
+         */
+
+        let vm = new Vue({
+            el: '#app',
+            /**
+             * 这个时候没有进行数据观测（没有data），只是做了父子关系和一些内部事件，比如$on, $off
+             * 这个地方可以混入公共逻辑，一般实在这个地方进行 Vue.mixin
+             * 再这里通过mixin写公共方法和插件
+             */
+            beforeCreate() {
+                console.log('before create')
+               
+            },
+            // 初始化了一些数据，注入数据源（有data了已经）
+            // 紧接着会将template模板编译到render函数中，没有dom，无法获取dom
+            created() {
+                console.log('created')
+            },
+            // 再第一次调用render之前调用
+            beforeMount() {
+                console.log('before mount')
+            },
+            render(h) {
+                console.log('render')
+                return h('div', this.msg)
+            },
+            // 创建真实dom，替换之前老的节点 vm.$el替换掉el， vm.$el即是真实dom， 渲染真实dom
+            mounted() {
+                console.log('mounted')
+            },
+            // 在这里可以做一些合并更新的操作
+            beforeUpdate() {
+                console.log('before update')
+            },
+            updated() {
+                console.log('updated')
+                // 不要再这里进行跟新数据了，会造成死循环
+                // this.msg = Math.random()
+            },
+            // 可以做自定义事件的解绑，$off，做定时器的清理， 取消dom事件的绑定
+            beforeDestroy() {
+                console.log('before destroy')
+            },
+            destroyed() {
+                console.log('destroyed')
+            },
+            data() {
+                return {
+                    msg: 'hello'
+                }
+            }
+        })
+        vm.msg = 100
+        vm.$destroy()  // 手动销毁，只是移除监听，不会移除dom
+    </script>
+</body>
+</html>

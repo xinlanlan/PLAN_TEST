@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 当前的这个表达式最后会被编译成 _xxx(1+1) -->
+        <!-- {{ 里面不能放js语法，因为最终会将返回值传递给函数 }} -->
+        <div>{{ 1 + 1 }}</div>
+        
+        <div>{{ msg.b }}</div>
+       
+        <div>{{ arr }}</div>
+        
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                // 1.响应式规则
+                // 会去递归的循环每一个vue的属性(所以属性嵌套越深，越消耗性能。性能浪费，后面vue3中变成了proxy)，会为每一个属性增加getter和setter方法，当属性变化时会触发视图更新
+                // 2.重写了数组的方法，当调用数组方法时也会触发更新，也会对数组的每一项就行监控
+                return {
+                    // 对象只会监控默认自带的属性，再vm.msg.b新增的属性不会进行监控
+                    msg: { a: 1},
+                    // 如果是数据的长度或者索引发生变化，是不会触发视图更新的
+                    arr: [1,2,3]
+                }
+            }
+        })
+
+        // 这个2是不会被监控的，除非将data中初始化一个值，更改才会进行监控
+        // vm.msg.b = 2
+        
+        //--vm.arr.length
+        // 可以通过set方法对通过对数组的索引方式进行修改数组，内部其实是采用的是splice的方法
+        vm.$set(vm.arr, 0, 100)
+        vm.$delete(vm.arr, 0)
+
+        // 上面就是vue2中的缺陷，vue3中采用proxy进行解决了
+    </script>
+</body>
+</html>

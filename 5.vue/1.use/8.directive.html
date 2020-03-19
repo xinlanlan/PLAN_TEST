@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div v-click-outside="hide">
+            <input type="text" @focus="show">
+            <div v-show="isShow">
+                显示面板 时间
+            </div>
+        </div>
+        <input type="text" v-focus>
+        <!-- 如果我们直接这样写，不生效，因为再页面初始化的时候确实聚焦了 -->
+        <!-- 但是编译模板的时候重新插入了，所以显示不会聚焦 -->
+        <input type="text" autofocus>
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    isShow: false
+                }
+            },
+            directives: {
+                // 指令有生命周期（钩子函数）
+                // bind 指令第一次绑定到元素的时候执行，只会执行一次
+                // inserted 插入
+                // update 更新
+                // unbind 
+                // 默认写一个函数的话表示的是bind + update
+                // clickOutside(el, bindings, vnode) {
+
+                // }
+                clickOutside: {
+                    bind(el, bindings, vnode) {
+                        let method = bindings.expression
+                        el.handler = function(e) {
+                            if(!el.contains(e.target)) {
+                                vnode.context[method]()
+                            }
+                        }
+                        document.addEventListener('click', el.handler)
+                    },
+                    unbind(el) {
+                        document.removeEventListener('click', el.handler)
+                    }
+                },
+                focus: {
+                    inserted(el, bindings, vnode) {
+                        el.focus()
+                    }
+                }
+            },
+            methods: {
+                show() {
+                    this.isShow = true
+                },
+                hide() {
+                    this.isShow = false
+                }
+            }
+            
+        })
+    </script>
+</body>
+</html>

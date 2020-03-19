@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{ timer | format('YYYY:MM:DD') }}
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./node_modules/moment/moment.js"></script>
+    <script>
+        // 过滤器分为全局过滤器和局部过滤器
+        Vue.filter('format', function(timer, formatter) {
+            console.log(formatter)
+            return moment(timer).format(formatter)
+        })
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    timer: 1212121212121
+                }
+            }
+        })
+    </script>
+</body>
+</html>

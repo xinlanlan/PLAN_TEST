@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        全选    <input type="checkbox" v-model="checkAll">
+        <hr>
+        <input type="checkbox" v-for="check of checks" v-model="check.check">
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    msg: {a: 1},
+                    checks: [{check: true}, {check: true}, {check: true}]
+                }
+            },
+            computed: {
+                checkAll: {
+                    get() {
+                        return this.checks.every(item => item.check)
+                    },
+                    // 计算属性一般很少用set方法，因为一般都是取值。一般v-model会使用，
+                    // 因为v-model是双向绑定，需要设置值
+                    set(newValue) {
+                        this.checks.map(item => {
+                            item.check = newValue
+                        })
+                    }
+                }
+            },
+            methods: {
+                fn(newValue, oldValue) {
+                    console.log(newValue, oldValue)
+                    console.log('这是methods中的方法')
+                }
+            },
+            watch: {
+                msg: [
+                    {
+                        handler(newValue, oldValue) {
+                            console.log(newValue, oldValue)
+                        },
+                        // 如果当前的属性增加了deep，那么就会再对内部对象进行取值
+                        deep: true
+                    },
+                    {
+                        handler(newValue, oldValue) {
+                            console.log(newValue, oldValue)
+                        },
+                        immediate: true // 立即执行
+                    },
+                    'fn'
+                ]
+               
+            }
+        })
+        setTimeout(() => {
+            vm.msg = 100
+        }, 500)
+    </script>
+</body>
+</html>

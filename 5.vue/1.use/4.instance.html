@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+       
+    </div>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            //el: '#app',
+            template: '<div>{{msg}}</div>',
+            data() {
+                return {
+                    msg: 'hello world'
+                }
+            }
+        })
+        
+        /** 
+         * 挂在，如果没有参数 表示我要手动挂载，可以挂载再任何地方
+         * vm.$el表示真是的dom
+         * 当然也可以传递参数 vm.$mount('#app')
+         */
+        vm.$mount() 
+        console.log(vm.$el) 
+        document.body.appendChild(vm.$el)
+        
+        vm.$watch('msg', function(newValue, oldValue) {
+            console.log(newValue)
+        })
+        vm.msg = 10
+        vm.msg = 100
+        vm.msg = 1000
+    </script>
+</body>
+</html>
