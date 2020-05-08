@@ -1,0 +1,12 @@
+{
+  "name": "2.theory",
+  "version": "1.0.0",
+  "description": "- vue中如何实现数据劫持\r - 数组的劫持\r - vue中的观察者模式\r - 计算属性和watch的区别(原理)\r - vue中的批量更新\r - nextTick原理\r - 什么是虚拟dom以及虚拟dom作用\r - vue中diff实现",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

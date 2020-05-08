@@ -11,7 +11,7 @@ Function.prototype.before = function(callback) {
     }
 }
 
-var fn = function (value) {
+var fn = function (...value) {
     console.log('吃饭', value)
 }
 

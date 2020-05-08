@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <div id="p"></div>
+</body>
+<script>
+    let channel = new MessageChannel()
+    let port1 = channel.port1
+    let port2 = channel.port2
+
+    port2.postMessage('hello world')
+    port1.onmessage = function(e) { // 回调时异步的
+        console.log(e.data) 
+    }
+</script>
+</html>
