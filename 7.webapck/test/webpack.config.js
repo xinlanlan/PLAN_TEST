@@ -1,4 +1,5 @@
 let path = require('path')
+let webpack = require('webpack')
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
@@ -20,14 +21,19 @@ module.exports = {
     mode: "development",
     devServer: {
         port: 3000,
-        contentBase: './dist'
+        contentBase: './dist',
+        hot: true
     },
     output: {
-        filename: '[name].[contentHash:8].js',
+        filename: '[name].js',
         path: path.resolve(__dirname, './dist')
     },
-    externals: {
-        '$': 'jquery'
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+            //... 可配置多个
+        },
+        extensions: ['.js','.css']  // 文件后缀查找顺序
     },
     module: {
         rules: [
@@ -47,9 +53,12 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns:['**/*']
+        // new CleanWebpackPlugin({
+        //     cleanOnceBeforeBuildPatterns:['**/*']
+        // }),
+        new webpack.DllReferencePlugin({
+            manifest: path.resolve(__dirname, 'dist', 'react.manifest.json')
         }),
-        ...htmlPlugins
+        ...htmlPlugins,
     ]
 }

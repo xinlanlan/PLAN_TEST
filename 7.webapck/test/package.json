@@ -27,6 +27,8 @@
   },
   "devDependencies": {
     "css-loader": "^3.5.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "style-loader": "^1.2.1"
   }
 }
