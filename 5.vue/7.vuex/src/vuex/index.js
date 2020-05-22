@@ -150,7 +150,6 @@ class Store {
             this.modules.register(path, module)
             installModule(this, this.state, path, module.rawModule)
         })
-        
     }
 }
 

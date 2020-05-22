@@ -3,7 +3,7 @@
 
 ### 请说一下响应式数据的原理
 - 核心点：Object.property
-- 默认vue在初始化数据时，会给data中的属性使用object.defineProperty重新订一所有属性，当页面取到对应属性时，会进行依赖收集(收集当前组件的watcher)如果属性变化会通知相关依赖进行更新操作
+- 默认vue在初始化数据时，会给data中的属性使用object.defineProperty重新定义所有属性，当页面取到对应属性时，会进行依赖收集(收集当前组件的watcher)如果属性变化会通知相关依赖进行更新操作
 - 原理 initData(初始化用户传入的data数据) -> new Observer(将数据进行观测) -> this.walk(value) 进行对象的处理 -> defineReactive(循环对象属性定义响应式变化) -> Object.defineProperty(使用Object.defineProperty重新定义数据)
 
 ### vue中时如何检测数据变化的
@@ -18,7 +18,7 @@
 - 原理： dep.notify()(通知watcher进行更新操作) -> subs[i].update()(依次调用watcher的update) -> queueWatcher(将watcher重新放到队列中) -> nextTick(flushSchedulerQueue)(异步清空watcher队列) 
 
 ### nextTick实现原理
-- nextTick方法主要是使用了红任务和微任务，定义了一个异步方法，多次调用nextTick会将方法存入到队列中，通过这个异步方法清空当前队列，所以这个nextTick方法是异步方法
+- nextTick方法主要是使用了宏任务和微任务，定义了一个异步方法，多次调用nextTick会将方法存入到队列中，通过这个异步方法清空当前队列，所以这个nextTick方法是异步方法
 ![Image text](./nextTick.png)
 
 - 注意：在Vue 2.4之前的版本中，nextTick几乎都是基于microTask实现的（具体可以看文章nextTick一节），但是由于microTask的执行优先级非常高，在某些场景之下它甚至要比事件冒泡还要快，就会导致一些诡异的问题；但是如果全部都改成macroTask，对一些有重绘和动画的场景也会有性能的影响。所以最终nextTick采取的策略是默认走microTask，对于一些DOM的交互事件，如v-on绑定的事件回调处理函数的处理，会强制走macroTask， 但是在2.6版本有改回了2.4的方案，因为找到像冒泡类似事件的解决方案.例如下题2.4和2.6表现一致

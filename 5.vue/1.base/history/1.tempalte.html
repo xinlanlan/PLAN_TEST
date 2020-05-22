@@ -7,16 +7,32 @@
 </head>
 <body>
     <div id="app">
-        {{ 1 + 1 }}
+    <div id="example">
+        <span>{{test}}</span>
+        <button @click="handleClick">change</button>
+    </div>
     </div>
 
-    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/vue/dist/vue.js"></script>
     <script>
         let vm = new Vue({
             el: '#app',
             data() {
                 return {
-                    msg: 'hello world'
+                    test: 'hello world'
+                }
+            },
+            methods: {
+                handleClick: function () {
+                    this.test = 'end';
+                    console.log('script')
+                    Promise.resolve().then(function () {
+                        console.log('promise')
+                    })
+                    this.$nextTick(function () {
+                        console.log('nextTick')
+                    })
+
                 }
             }
         })
