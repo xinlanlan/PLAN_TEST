@@ -9,8 +9,7 @@ console.log(union)
 ```
 - 交集
 ```
-let s1 = [1,2,3,4,5]
-let s2 = [2,3,4,6,7];
+
 let intersection = [...new Set(s1)].filter(item => {
     return new Set(s2).has(item)
 })
@@ -30,7 +29,7 @@ console.log(diff)
 - map是有key得, key可以是一个对象
 
 ### WeakMap 得key必须是一个对象类型
-- 相对于Map是一个若链接，如果Map得key引用得对象得变量别删除了，哪个对象还会被引用不会被垃圾回收，但是WeakMap得key只是一个名字而已，删除就清空了，例如
+- 相对于Map是一个弱连接，如果Map得key引用得对象得变量被删除了，哪个对象还会被引用不会被垃圾回收，但是WeakMap得key只是一个名字而已，删除就清空了，例如
 ```
 let b = new Map()
 let a = {name: 10}

@@ -33,4 +33,14 @@
     </div>
 </body>
 
+<script>
+    window.onbeforeunload = function() {
+        let xhr = new XMLHttpRequest()
+        xhr.open('GET', 'http://localhost:3000/user', true)
+        xhr.onload = function(data) {
+            console.log(data)
+        }
+        xhr.send('hehhe')
+    }
+</script>
 </html>

@@ -1,31 +1,19 @@
-function Company() {
-    this.observers = []
-    this.state = '放假'
+function sum(a, b) {
+    console.log('sum')
+    return a + b
 }
 
-Company.prototype.attach = function(observer) {
-    this.observers.push(observer)
+function toUpper(str) {
+    console.log('toUpper')
+    return str.toUpperCase()
 }
 
-Company.prototype.setState = function(state) {
-    if(this.state === state) {
-        return
-    }
-    this.state = state
-    this.observers.forEach(observer => observer.update(state))
+function add(str) {
+    console.log('add')
+    return str + '-------'
 }
 
-function Staff(name) {
-    this.name = name
-}
-Staff.prototype.update = function(state) {
-    console.log(`通知${this.name}：公司得状态为${state}`)
-}
+let compose = (...fns) => fns.reduce((a, b) => (...args) => a(b(...args))) 
 
-let company = new Company()
-let observer1 = new Staff('number1')
-let observer2 = new Staff('number2')
-
-company.attach(observer1)
-company.attach(observer2)
-company.setState('复工')
+let r = compose(add, toUpper, sum)('fei', '20')
+console.log(r)

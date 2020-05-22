@@ -48,3 +48,5 @@ this.$bus.$emit('监听事件', 'hello')
         return  Message(options)
     } 
 });
+
+
