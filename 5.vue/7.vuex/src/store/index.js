@@ -69,7 +69,6 @@ let store = new Vuex.Store({
   state: {
     age: 10
   },
-  
   getters: {
     myAge(state) {
       return state.age + 20
@@ -97,5 +96,10 @@ store.registerModule('d', {
     age: 'd100'
   }
 })
+
+setInterval(function() {
+  console.log(store)
+}, 2000)
+
 
 export default store
