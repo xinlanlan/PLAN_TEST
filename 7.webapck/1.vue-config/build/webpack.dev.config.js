@@ -9,15 +9,22 @@ function resolve(dir) {
 
 module.exports = merge(base, {
   mode: "development",
-  devtool: 'cheap-module-eval-source-map',
-  devServer: {
+  output: {
+    path: resolve('dist'),
+    filename: 'js/[name].js',
+    chunkFilename: 'js/[name].js',
+    publicPath: '/'
+  },
+  devtool: '#cheap-module-eval-source-map',
+  devServer: { 
+    host: "0.0.0.0", 
     port: 3000,
-    progress: false,
     hot: true,
+    clientLogLevel: 'none',
     open: false,
     historyApiFallback: true,
     contentBase: resolve('dist'),
-    stats: "errors-only", 
+    //stats: "errors-only", 
     overlay: {
       warnings: true,
       errors: true

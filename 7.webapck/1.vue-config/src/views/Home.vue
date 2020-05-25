@@ -11,9 +11,6 @@
       return {
         msg: 'i am home'
       }
-    },
-    mounted() {
-      console.log(3)
     }
   }
 </script>

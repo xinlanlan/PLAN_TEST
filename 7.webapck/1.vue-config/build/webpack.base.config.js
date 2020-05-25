@@ -3,6 +3,8 @@ const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const PreloadPlugin = require('preload-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 function resolve(dir) {
@@ -13,12 +15,12 @@ module.exports = {
   entry: {
     main: resolve('src/main.js')
   },
-  output: {
-    path: resolve('dist'),
-    filename: 'js/[name].[hash:8].js',
-    chunkFilename: 'js/[name].[hash:8].js',
-    //publicPath: './'
-  },
+  // output: {
+  //   path: resolve('dist'),
+  //   filename: 'js/[name].[hash:8].js',
+  //   chunkFilename: 'js/[name].[hash:8].js',
+  //   //publicPath: './'
+  // },
   resolve: {
     extensions: [".js", ".json", ".vue"],
     alias: {
@@ -34,12 +36,13 @@ module.exports = {
     assets: false
   },
   module: {
+    noParse: /^(vue|vue-router|vuex|vuex-router-sync)$/,
     rules: [
       {
         test: /\.vue$/,
         exclude: /node_modules/,
         use: [
-          // 'cache-loader',   缓存
+          'cache-loader',   // 缓存
           // 'thread-loader',  多进程打包
           {
             loader: 'vue-loader',
@@ -61,17 +64,17 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          'postcss-loader',
           {
             loader: "sass-loader",
             options: {
-              implementtation: require('dart-sass')
+              implementation: require('dart-sass')
             }
-          }
+          },
+          'postcss-loader',
         ]
       },
       {
-        test: /\.(jpe?g|png|gif)$/i,
+        test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
         use: [
           {
             loader: 'url-loader',
@@ -80,9 +83,20 @@ module.exports = {
               fallback: {
                 loader: 'file-loader',
                 options: {
-                  name: 'images/[name].[hash:8].[ext]'
+                  name: 'img/[name].[hash:8].[ext]'
                 }
               }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(svg)(\?.*)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'img/[name].[hash:8].[ext]'
             }
           }
         ]
@@ -106,17 +120,66 @@ module.exports = {
       }
     ]
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          name: 'chunk-vendors',
+          test: /[\\\/]node_modules[\\\/]/,
+          priority: -10,
+          chunks: 'initial'
+        },
+        common: {
+          name: 'chunk-common',
+          minChunks: 2,
+          priority: -20,
+          chunks: 'initial',
+          reuseExistingChunk: true
+        }
+      }
+    }
+  },
   plugins: [
     new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: resolve('public/index.html'),
-      title: 'vue-webpack-config',
-      favicon: resolve('public/favicon.ico'),
-      // hash: true
-    }),
-    new CleanWebpackPlugin(),
-    new webpack.ProgressPlugin(),
-    // new CompressionWebpackPlugin() 开启gzip压缩
+    new webpack.DefinePlugin(
+      {
+        'process.env': {
+          NODE_ENV: '"development"',
+          BASE_URL: '"/"'
+        }
+      }
+    ),
+    new FriendlyErrorsWebpackPlugin(
+      {
+        additionalTransformers: [
+          function () { /* omitted long function */ }
+        ],
+        additionalFormatters: [
+          function () { /* omitted long function */ }
+        ]
+      }
+    ),
+    new HtmlWebpackPlugin(
+      {
+        title: 'vue-webpack-config',
+        filename: 'index.html',
+        template: resolve('public/index.html'),
+        favicon: resolve('public/favicon.ico'),
+        // hash: true
+      }
+    ),
+    // new PreloadPlugin(
+    //   {
+    //     rel: 'preload',
+    //     include: 'initial',
+    //     fileBlacklist: [
+    //       /\.map$/,
+    //       /hot-update\.js$/
+    //     ]
+    //   }
+    // ),
+    // new CleanWebpackPlugin(),
+    // new webpack.ProgressPlugin(),
+    // new CompressionWebpackPlugin() // 开启gzip压缩
   ]
 }
